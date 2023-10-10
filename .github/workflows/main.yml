@@ -1,0 +1,48 @@
+name: Email and Response Workflow
+
+on: 
+    workflow_dispatch:
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Email
+        env:
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT }}
+        run: |
+         python send.py
+
+  wait-for-response:
+    runs-on: ubuntu-latest
+    needs: send-email
+    steps:
+      - name: Wait for Email Response
+        env:
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        run: |
+          python check.py
+      
+
+  process-response:
+    runs-on: ubuntu-latest
+    needs: wait-for-response
+    steps:
+      - name: Process Response
+        env:
+          RESPONSE: ${{ steps.wait-for-response.outputs.response }}
+        run: |
+          if [ "$RESPONSE" == "approved" ]; then
+            # Perform actions for an 'approved' response
+            echo "Response is approved"
+          elif [ "$RESPONSE" == "denied" ]; then
+            # Perform actions for a 'denied' response
+            echo "Response is denied"
+          else
+            # Handle other cases if needed
+            echo "Response is unknown"
+          fi
+      
