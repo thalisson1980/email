@@ -7,6 +7,10 @@ jobs:
   send-email:
     runs-on: ubuntu-latest
     steps:
+
+      - name: Check out repository
+        uses: actions/checkout@v3
+
       - name: Send Email
         env:
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
