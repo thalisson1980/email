@@ -20,7 +20,7 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           RECIPIENT_EMAIL: ${{ secrets.RECIPIENT }}
         run: |
-         python send.py
+         python .github/actions/src/send.py
 
   wait-for-response:
     runs-on: ubuntu-latest
@@ -31,7 +31,7 @@ jobs:
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: |
-          python check.py
+          python .github/actions/src/check.py
       
 
   process-response:
