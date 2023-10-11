@@ -6,7 +6,10 @@ on:
 jobs:
   send-email:
     runs-on: ubuntu-latest
+    environment:
+      name: Dev
     steps:
+  
 
       - name: Check out repository
         uses: actions/checkout@v3
